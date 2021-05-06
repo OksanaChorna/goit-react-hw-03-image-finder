@@ -29,6 +29,7 @@ export default class Modal extends Component {
     return createPortal(
       <div className={style.Overlay} onClick={this.handleOverlayClic}>
         <div className={style.Modal}>{this.props.children}</div>
+        {/* <img src="" alt="" /> */}
       </div>,
       modalRoot,
     );
