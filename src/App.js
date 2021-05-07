@@ -13,24 +13,7 @@ class App extends Component {
     galarry: [],
     page: 1,
     showModal: false,
-    searchQuery: '',
   };
-
-  // q=${this.state.searchQuery}
-
-  componentDidMount() {
-    console.log(this.state.searchQuery);
-    axios
-      .get(
-        `${BASE_URL}/?q=${this.state.searchQuery}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`,
-      )
-      .then(({ data }) => {
-        console.log(data.hits);
-        this.setState({
-          galarry: data.hits,
-        });
-      });
-  }
 
   toggleModal = () => {
     this.setState(({ showModal }) => ({
@@ -38,7 +21,18 @@ class App extends Component {
     }));
   };
 
-  showGalarry = () => {};
+  onChangeQuery = searchQuery => {
+    axios
+      .get(
+        `${BASE_URL}/?q=${searchQuery}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`,
+      )
+      .then(({ data }) => {
+        console.log(data.hits);
+        this.setState({
+          galarry: data.hits,
+        });
+      });
+  };
 
   showMoreGalarry = () => {};
 
@@ -46,7 +40,7 @@ class App extends Component {
     const { showModal, galarry } = this.state;
     return (
       <Container>
-        <Searchbar onSubmit={this.showGalarry} />
+        <Searchbar onSubmit={this.onChangeQuery} />
         {/* перевірка чи є картинки, а потім показувати кнопку Ще */}
         {galarry.length !== 0 && <Button onClick={this.showMoreGalarry} />}
         <ul>
