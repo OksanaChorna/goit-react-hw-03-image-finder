@@ -19,7 +19,7 @@ export default class Modal extends Component {
     }
   };
 
-  handleOverlayClic = event => {
+  handleOverlayClick = event => {
     if (event.target === event.currentTarget) {
       this.props.onClose();
     }
@@ -27,7 +27,7 @@ export default class Modal extends Component {
 
   render() {
     return createPortal(
-      <div className={style.Overlay} onClick={this.handleOverlayClic}>
+      <div className={style.Overlay} onClick={this.handleOverlayClick}>
         <div className={style.Modal}>{this.props.children}</div>
         {/* <img src="" alt="" /> */}
       </div>,

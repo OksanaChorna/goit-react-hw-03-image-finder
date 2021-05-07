@@ -2,11 +2,21 @@ import React, { Component } from 'react';
 
 class Searchbar extends Component {
   state = {
-    name: '',
+    searchQuery: '',
   };
 
   handleSubmit = event => {
     console.log(event);
+    event.preventDefault();
+
+    this.props.onSubmit(this.state.searchQuery);
+
+    this.setState({ searchQuery: '' });
+  };
+
+  handleChange = event => {
+    console.log(event.currentTarget.value);
+    this.setState({ searchQuery: event.currentTarget.value });
   };
 
   render() {
@@ -24,7 +34,7 @@ class Searchbar extends Component {
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            // value={name}
+            onChange={this.handleChange}
           />
         </form>
       </header>
