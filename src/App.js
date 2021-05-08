@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Button from './components/Button/Button';
 import Container from './components/Container';
+import ImageGallery from './components/ImageGallery/ImageGallery';
 import Loader from './components/Loader/Loader';
 import Modal from './components/Modal/Modal';
 import Searchbar from './components/Searchbar/Searchbar';
@@ -62,14 +63,7 @@ class App extends Component {
       <Container>
         {error && <h1>Try again!</h1>}
         <Searchbar onSubmit={this.onChangeQuery} />
-        <ul>
-          {this.state.galarry.map(({ id, webformatURL, largeImageURL }) => (
-            <li key={id}>
-              {' '}
-              <img src={webformatURL} alt="img" />
-            </li>
-          ))}
-        </ul>
+        <ImageGallery showGalarry={galarry} />
 
         {isLoading && <Loader />}
         {shouldShowLoadMoreBtn && <Button onClick={this.fetchGalarry} />}

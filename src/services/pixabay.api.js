@@ -7,7 +7,6 @@ const fetchPixabayImgs = ({ searchQuery = '', page = 1 }) => {
   return axios.get(
     `${BASE_URL}/?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`,
   );
-  // .then(({ data }) => data.hits);
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export

@@ -1,5 +1,13 @@
-const ImageGallery = ({ props }) => {
-  return <ul className="ImageGallery">{/* Набор <li> с изображениями */}</ul>;
+import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
+
+const ImageGallery = ({ showGalarry }) => {
+  return (
+    <ul className="ImageGallery">
+      {showGalarry.map(({ id, webformatURL, largeImageURL }) => {
+        return <ImageGalleryItem key={id} webformatURL={webformatURL} />;
+      })}
+    </ul>
+  );
 };
 
 export default ImageGallery;

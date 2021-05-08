@@ -1,9 +1,13 @@
 import style from './ImageGalleryItem.module.css';
 
-const ImageGalleryItem = ({ props }) => {
+const ImageGalleryItem = ({ webformatURL }) => {
   return (
     <li className={style.ImageGalleryItem}>
-      <img src="#" alt="img" className={style.ImageGalleryItemImage} />
+      <img
+        src={webformatURL}
+        alt="img"
+        className={style.ImageGalleryItemImage}
+      />
     </li>
   );
 };
