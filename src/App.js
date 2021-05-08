@@ -11,7 +11,7 @@ class App extends Component {
   state = {
     gallery: [],
     page: 1,
-    largeImageURL: '',
+    largeImage: '',
     showModal: false,
     searchQuery: '',
     isLoading: false,
@@ -50,16 +50,12 @@ class App extends Component {
       });
   };
 
-  onImgClick = event => {
-    event.preventDefault();
-    console.log(event.target.nodeName);
+  imgClick = largeImageURL => {
+    this.setState({
+      largeImage: largeImageURL,
+    });
 
-    // if (event.target.nodeName !== 'IMG') {
-    //   return;
-    // }
-    // const largeImgURL = event.target.dataset.source;
-    // largeImgRef.src = largeImgURL;
-    // onOpenModal(largeImgURL, event.target.alt);
+    this.toggleModal();
   };
 
   toggleModal = () => {
@@ -69,20 +65,20 @@ class App extends Component {
   };
 
   render() {
-    const { showModal, gallery, isLoading, error } = this.state;
+    const { showModal, gallery, isLoading, error, largeImage } = this.state;
     const shouldShowLoadMoreBtn = gallery.length > 0 && !isLoading;
     return (
       <Container>
         {error && <h1>Try again!</h1>}
         <Searchbar onSubmit={this.onChangeQuery} />
-        <ImageGallery showGallery={gallery} />
+        <ImageGallery showGallery={gallery} onImgClick={this.imgClick} />
 
         {isLoading && <Loader />}
         {shouldShowLoadMoreBtn && <Button onClick={this.fetchGallery} />}
 
         {showModal && (
-          <Modal onClose={this.toggleModal}>
-            <img src="" alt="" />
+          <Modal onClose={this.imgClick}>
+            <img src={largeImage} alt="" />
           </Modal>
         )}
       </Container>
