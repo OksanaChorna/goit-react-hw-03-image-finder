@@ -6,6 +6,7 @@ import Loader from './components/Loader/Loader';
 import Modal from './components/Modal/Modal';
 import Searchbar from './components/Searchbar/Searchbar';
 import pixabayApi from './services/pixabay.api';
+import PropTypes from 'prop-types';
 
 class App extends Component {
   state = {
@@ -85,5 +86,15 @@ class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  gallery: PropTypes.array,
+  page: PropTypes.number,
+  searchQuery: PropTypes.string,
+  largeImage: PropTypes.string,
+  showModal: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  error: PropTypes.string,
+};
 
 export default App;

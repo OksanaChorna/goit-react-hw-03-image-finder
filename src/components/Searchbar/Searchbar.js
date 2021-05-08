@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Searchbar extends Component {
   state = {
@@ -10,7 +11,7 @@ class Searchbar extends Component {
 
     this.props.onSubmit(this.state.query);
 
-    // this.setState({ query: '' });
+    this.setState({ query: '' });
   };
 
   handleChange = event => {
@@ -39,5 +40,10 @@ class Searchbar extends Component {
     );
   }
 }
+
+Searchbar.propTypes = {
+  query: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default Searchbar;
