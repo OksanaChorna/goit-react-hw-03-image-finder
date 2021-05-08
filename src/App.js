@@ -13,6 +13,34 @@ class App extends Component {
     galarry: [],
     page: 1,
     showModal: false,
+    searchQuery: '',
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchQuery !== this.state.searchQuery) {
+      this.fetchGalarry();
+    }
+  }
+
+  onChangeQuery = query => {
+    this.setState({ searchQuery: query, page: 1, galarry: [] });
+  };
+
+  fetchGalarry = () => {
+    const { searchQuery, page } = this.state;
+    axios
+      .get(
+        `${BASE_URL}/?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`,
+      )
+      .then(({ data }) => {
+        this.setState(prevState => ({
+          galarry: [...prevState.galarry, ...data.hits],
+          page: prevState.page + 1,
+        }));
+        //   .catch(error => {
+        //   console.log(error);
+        // });
+      });
   };
 
   toggleModal = () => {
@@ -20,29 +48,14 @@ class App extends Component {
       showModal: !showModal,
     }));
   };
-
-  onChangeQuery = searchQuery => {
-    axios
-      .get(
-        `${BASE_URL}/?q=${searchQuery}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`,
-      )
-      .then(({ data }) => {
-        console.log(data.hits);
-        this.setState({
-          galarry: data.hits,
-        });
-      });
-  };
-
-  showMoreGalarry = () => {};
+  // showMoreGalarry = () => {};
 
   render() {
     const { showModal, galarry } = this.state;
     return (
       <Container>
         <Searchbar onSubmit={this.onChangeQuery} />
-        {/* перевірка чи є картинки, а потім показувати кнопку Ще */}
-        {galarry.length !== 0 && <Button onClick={this.showMoreGalarry} />}
+
         <ul>
           {this.state.galarry.map(({ id, webformatURL, largeImageURL }) => (
             <li key={id}>
@@ -51,6 +64,9 @@ class App extends Component {
             </li>
           ))}
         </ul>
+
+        {/* перевірка чи є картинки, а потім показувати кнопку Ще */}
+        {galarry.length !== 0 && <Button onClick={this.fetchGalarry} />}
 
         {showModal && (
           <Modal onClose={this.toggleModal}>
