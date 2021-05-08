@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import Button from './components/Button/Button';
-import axios from 'axios';
 import Container from './components/Container';
+import Loader from './components/Loader/Loader';
 import Modal from './components/Modal/Modal';
 import Searchbar from './components/Searchbar/Searchbar';
-
-const BASE_URL = 'https://pixabay.com/api';
-const API_KEY = '20667195-d8cc0b45a3716479e33d72c4b';
+import pixabayApi from './services/pixabay.api';
 
 class App extends Component {
   state = {
     galarry: [],
     page: 1,
+    largeImageURL: '',
     showModal: false,
     searchQuery: '',
+    isLoading: false,
+    error: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -23,24 +24,29 @@ class App extends Component {
   }
 
   onChangeQuery = query => {
-    this.setState({ searchQuery: query, page: 1, galarry: [] });
+    this.setState({ searchQuery: query, page: 1, galarry: [], error: null });
   };
 
   fetchGalarry = () => {
     const { searchQuery, page } = this.state;
-    axios
-      .get(
-        `${BASE_URL}/?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`,
-      )
+    const options = { searchQuery, page };
+
+    this.setState({ isLoading: true });
+    pixabayApi
+      .fetchPixabayImgs(options)
       .then(({ data }) => {
         this.setState(prevState => ({
           galarry: [...prevState.galarry, ...data.hits],
           page: prevState.page + 1,
         }));
-        //   .catch(error => {
-        //   console.log(error);
-        // });
-      });
+      })
+      .catch(error => this.setState({ error }))
+      .finally(() => this.setState({ isLoading: false }));
+
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
   };
 
   toggleModal = () => {
@@ -48,14 +54,14 @@ class App extends Component {
       showModal: !showModal,
     }));
   };
-  // showMoreGalarry = () => {};
 
   render() {
-    const { showModal, galarry } = this.state;
+    const { showModal, galarry, isLoading, error } = this.state;
+    const shouldShowLoadMoreBtn = galarry.length > 0 && !isLoading;
     return (
       <Container>
+        {error && <h1>Try again!</h1>}
         <Searchbar onSubmit={this.onChangeQuery} />
-
         <ul>
           {this.state.galarry.map(({ id, webformatURL, largeImageURL }) => (
             <li key={id}>
@@ -65,8 +71,8 @@ class App extends Component {
           ))}
         </ul>
 
-        {/* перевірка чи є картинки, а потім показувати кнопку Ще */}
-        {galarry.length !== 0 && <Button onClick={this.fetchGalarry} />}
+        {isLoading && <Loader />}
+        {shouldShowLoadMoreBtn && <Button onClick={this.fetchGalarry} />}
 
         {showModal && (
           <Modal onClose={this.toggleModal}>
