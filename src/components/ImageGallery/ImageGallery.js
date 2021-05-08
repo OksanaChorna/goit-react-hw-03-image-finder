@@ -1,9 +1,9 @@
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 
-const ImageGallery = ({ showGalarry }) => {
+const ImageGallery = ({ showGallery }) => {
   return (
     <ul className="ImageGallery">
-      {showGalarry.map(({ id, webformatURL, largeImageURL }) => {
+      {showGallery.map(({ id, webformatURL, largeImageURL }) => {
         console.log(webformatURL);
         return <ImageGalleryItem key={id} webformatURL={webformatURL} />;
       })}

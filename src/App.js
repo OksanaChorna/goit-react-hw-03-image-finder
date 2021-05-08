@@ -9,7 +9,7 @@ import pixabayApi from './services/pixabay.api';
 
 class App extends Component {
   state = {
-    galarry: [],
+    gallery: [],
     page: 1,
     largeImageURL: '',
     showModal: false,
@@ -20,15 +20,14 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
-      this.fetchGalarry();
+      this.fetchGallery();
     }
   }
 
   onChangeQuery = query => {
-    this.setState({ searchQuery: query, page: 1, galarry: [], error: null });
+    this.setState({ searchQuery: query, page: 1, gallery: [], error: null });
   };
-
-  fetchGalarry = () => {
+  fetchGallery = () => {
     const { searchQuery, page } = this.state;
     const options = { searchQuery, page };
 
@@ -37,7 +36,7 @@ class App extends Component {
       .fetchPixabayImgs(options)
       .then(({ data }) => {
         this.setState(prevState => ({
-          galarry: [...prevState.galarry, ...data.hits],
+          gallery: [...prevState.gallery, ...data.hits],
           page: prevState.page + 1,
         }));
       })
@@ -51,6 +50,18 @@ class App extends Component {
       });
   };
 
+  onImgClick = event => {
+    event.preventDefault();
+    console.log(event.target.nodeName);
+
+    // if (event.target.nodeName !== 'IMG') {
+    //   return;
+    // }
+    // const largeImgURL = event.target.dataset.source;
+    // largeImgRef.src = largeImgURL;
+    // onOpenModal(largeImgURL, event.target.alt);
+  };
+
   toggleModal = () => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
@@ -58,16 +69,16 @@ class App extends Component {
   };
 
   render() {
-    const { showModal, galarry, isLoading, error } = this.state;
-    const shouldShowLoadMoreBtn = galarry.length > 0 && !isLoading;
+    const { showModal, gallery, isLoading, error } = this.state;
+    const shouldShowLoadMoreBtn = gallery.length > 0 && !isLoading;
     return (
       <Container>
         {error && <h1>Try again!</h1>}
         <Searchbar onSubmit={this.onChangeQuery} />
-        <ImageGallery showGalarry={galarry} />
+        <ImageGallery showGallery={gallery} />
 
         {isLoading && <Loader />}
-        {shouldShowLoadMoreBtn && <Button onClick={this.fetchGalarry} />}
+        {shouldShowLoadMoreBtn && <Button onClick={this.fetchGallery} />}
 
         {showModal && (
           <Modal onClose={this.toggleModal}>
