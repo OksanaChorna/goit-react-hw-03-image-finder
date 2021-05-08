@@ -3,7 +3,7 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 const LoaderComp = () => {
   return (
-    <>
+    <div className="Button-wraper">
       <Loader
         type="TailSpin"
         color="#00BFFF"
@@ -11,7 +11,7 @@ const LoaderComp = () => {
         width={100}
         timeout={3000} //3 secs
       />
-    </>
+    </div>
   );
 };
 
