@@ -14,23 +14,23 @@ class App extends Component {
     page: 1,
     largeImage: '',
     showModal: false,
-    searchQuery: '',
+    q: '',
     isLoading: false,
     error: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchQuery !== this.state.searchQuery) {
+    if (prevState.q !== this.state.q) {
       this.fetchGallery();
     }
   }
 
   onChangeQuery = query => {
-    this.setState({ searchQuery: query, page: 1, gallery: [], error: null });
+    this.setState({ q: query, page: 1, gallery: [], error: null });
   };
   fetchGallery = () => {
-    const { searchQuery, page } = this.state;
-    const options = { searchQuery, page };
+    const { q, page } = this.state;
+    const options = { q, page };
 
     this.setState({ isLoading: true });
     pixabayApi
@@ -90,7 +90,7 @@ class App extends Component {
 App.propTypes = {
   gallery: PropTypes.array,
   page: PropTypes.number,
-  searchQuery: PropTypes.string,
+  q: PropTypes.string,
   largeImage: PropTypes.string,
   showModal: PropTypes.bool,
   isLoading: PropTypes.bool,
